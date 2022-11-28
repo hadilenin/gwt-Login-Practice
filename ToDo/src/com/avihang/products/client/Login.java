@@ -10,8 +10,14 @@ import com.avihang.frameworks.ags.client.components.AMDBC_Enum.ButtonStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -53,7 +59,6 @@ public class Login extends VerticalPanel{
 		
 		tbUsername.getElement().getStyle().setPropertyPx("width", 300);
 		tbUsername.getMainWidget().getElement().getStyle().setColor("black");
-		tbUsername.getElement().getStyle().setFontSize(15, Unit.PT);
 		pwPassword.getElement().getStyle().setPropertyPx("width", 300);
 		cdContainer.getElement().getStyle().setProperty("marginTop", "130px");
 		cdContainer.getElement().getStyle().setBackgroundColor("#86d1aa");
@@ -62,24 +67,45 @@ public class Login extends VerticalPanel{
 		cdContainer.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
 		fltBnRefresh.getElement().getStyle().setCursor(Cursor.POINTER);
 		
-		
 		bnSubmit.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent arg) {
-				// TODO Auto-generated method stub
-				Window.alert(tbUsername.getText() + "@" + pwPassword.getValue());
+				
+				if (pwPassword.getValue().isEmpty()) 
+					pwPassword.showError("password input was glossed over!");
+				
+				if(tbUsername.getText().isEmpty())
+					tbUsername.showError("username input was glossed over!");
+				 
+				if(!(pwPassword.getValue().isEmpty() || tbUsername.getText().isEmpty()))
+					Window.alert(tbUsername.getText() + "@" + pwPassword.getValue());
+			
 			}
 		});
+		
 		fltBnRefresh.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
 				// TODO Auto-generated method stub
 				tbUsername.setText("");
+				tbUsername.clearError();
 				pwPassword.setValue("");
+				pwPassword.clearError();
 			}
 		});
+		
+		tbUsername.getMainWidget().addKeyPressHandler(new KeyPressHandler() {
+			
+			@Override
+			public void onKeyPress(KeyPressEvent arg0) {
+				// TODO Auto-generated method stub
+				tbUsername.clearError();
+				pwPassword.clearError();
+			}
+		});
+		
 		
 		cdContainer.addToContent(tbUsername);
 		cdContainer.addToContent(pwPassword);
